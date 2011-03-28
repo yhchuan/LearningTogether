@@ -1,18 +1,26 @@
 package my.cloud.projects;
 
 
+import java.util.Collections;
 import java.util.List;
 
 import javax.jdo.PersistenceManager;
+import javax.jdo.Query;
+import javax.jdo.annotations.IdGeneratorStrategy;
 import javax.jdo.annotations.IdentityType;
 import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Persistent;
 import javax.jdo.annotations.PrimaryKey;
 
+import com.google.appengine.api.datastore.Key;
+
 
 @PersistenceCapable(identityType = IdentityType.APPLICATION)
 public class MyUser {
-	@PrimaryKey
+    @PrimaryKey
+    @Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
+    private Key id;
+    
 	@Persistent
 	private String myNickName;
 
@@ -43,12 +51,6 @@ public class MyUser {
 	public List<ShareItem> getItems() {
 		return items;
 	}
-	
-	//extend
-	public static MyUser getMyUserByNickName(String nickName) {
-		PersistenceManager pm=PMF.get().getPersistenceManager();
-		return pm.getObjectById(MyUser.class, nickName);
-	}
 
 	private void setMyNickName(String myNickName) {
 		this.myNickName = myNickName;
@@ -58,4 +60,33 @@ public class MyUser {
 		return myNickName;
 	}
 	
+	//extend
+	public static MyUser getMyUserByNickName(String nickName) {
+		PersistenceManager pm=PMF.get().getPersistenceManager();
+		MyUser myUser;
+		Query query=pm.newQuery("select from my.cloud.projects.MyUser where myNickName==nickName "
+					+"parameters String nickName");
+		List<MyUser> list=(List<MyUser>)query.execute(nickName);
+		if (list.size()!=0)
+		{
+			try{
+				myUser=list.get(0);
+			}
+			finally{
+				query.closeAll();
+			}
+		}
+		else
+		{
+			myUser=new MyUser(nickName, Collections.EMPTY_LIST, Collections.EMPTY_LIST);
+			try {
+				pm.makePersistent(myUser);
+			} 
+			finally {
+				pm.close();
+			}
+		}
+		return myUser;
+	}
+
 }

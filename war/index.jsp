@@ -28,11 +28,13 @@
   </script>
   <%
   String url=request.getParameter("shareurl");
+  MyUser myUser=null;
   	if(url==null)
   		url="";
-  MyUser myUser=MyUser.getMyUserByNickName(UserServiceFactory.getUserService().getCurrentUser().getNickname());
-  if(myUser==null)
-	  response.sendRedirect(RegURL);
+  if(UserServiceFactory.getUserService().getCurrentUser()==null)
+	  response.sendRedirect(UserServiceFactory.getUserService().createLoginURL(request.getRequestURI()));
+  myUser=MyUser.getMyUserByNickName(UserServiceFactory.getUserService().getCurrentUser().getNickname());
+
   %>
 </head>
 <body>
@@ -55,6 +57,7 @@
   	</form>
   	
   	<div class="sharelist">
+  	<%if(myUser!=null) {%>
   		<%for(MyUser friend : myUser.getFriends())
   		{
   			for(ShareItem item : friend.getItems())
@@ -70,6 +73,7 @@
   			<%}
   		}	
   		%>
+  		<%} %>
   	</div>
   </div>
 </body>
