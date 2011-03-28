@@ -3,6 +3,7 @@ package my.cloud.projects;
 
 import java.util.List;
 
+import javax.jdo.PersistenceManager;
 import javax.jdo.annotations.IdentityType;
 import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Persistent;
@@ -22,7 +23,7 @@ public class MyUser {
 	private List<ShareItem> items;
 	
 	public MyUser(String myNickName, List<MyUser> friends, List<ShareItem> items){
-		this.myNickName=myNickName;
+		this.setMyNickName(myNickName);
 		this.setFriends(friends);
 		this.setItems(items);
 	}
@@ -42,4 +43,19 @@ public class MyUser {
 	public List<ShareItem> getItems() {
 		return items;
 	}
+	
+	//extend
+	public static MyUser getMyUserByNickName(String nickName) {
+		PersistenceManager pm=PMF.get().getPersistenceManager();
+		return pm.getObjectById(MyUser.class, nickName);
+	}
+
+	private void setMyNickName(String myNickName) {
+		this.myNickName = myNickName;
+	}
+
+	public String getMyNickName() {
+		return myNickName;
+	}
+	
 }
