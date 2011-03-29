@@ -26,53 +26,38 @@
   //-- JavaScript code in here .
   </script>
   <%
-  String url=request.getParameter("shareurl");
-  MyUser myUser=null;
-  	if(url==null)
-  		url="";
+  String nickname=request.getParameter("nickname");
+  MyUser myUser;
+  	if(nickname==null)
+  		nickname="";
   if(UserServiceFactory.getUserService().getCurrentUser()==null)
 	  response.sendRedirect(UserServiceFactory.getUserService().createLoginURL(request.getRequestURI()));
   myUser=MyUser.getMyUserByNickName(UserServiceFactory.getUserService().getCurrentUser().getNickname());
   %>
 </head>
 <body>
-  <div id="main">
-  	<form>
-  		<p>
-  			<label for="url">URL:</label>
-  			<input type="text" id="url" name="url" 
-  			value='<%=url %>' />
-  		</p>
-  		<p>
-  			<label for="tag">tag:</label>
-  			<input type="text" id="tag" name="tag" />
-  		</p>
-  		<p>
-  			<label for="shortInfo">shortInfo:</label>
-  			<textarea rows="3" id="shortInfo" name="shortInfo">
-  			</textarea>
-  		</p>  		
-  	</form>
-  	
-  	<div class="sharelist">
-  	<%if(myUser!=null) {%>
-  		<%for(MyUser friend : myUser.getFriends())
-  		{
-  			for(ShareItem item : friend.getItems())
-  			{ %>
-  				<div class="item">
+	
+  	<div>
+  	<%if(myUser!=null) {
+  		PersistenceManager pm=PMF.get().getPersistenceManager();
+		Query query=pm.newQuery("select from my.cloud.projects.MyUser where myNickName==nickName "
+					+"parameters String nickName");
+		List<MyUser> list=(List<MyUser>)query.execute(nickname);
+  		
+  		for(MyUser friend : list)
+  		{%>
+  				<div>
   					<p>
-  						<a href=<%=item.getUrl() %>><%=item.getShortInfo() %></a>
+  						name:<%=nickname %>
   					</p>
   					<p>
-  						Shared BY <%=friend.getMyNickName() %> At Time:<%=item.getSubmitDate().toString() %>
-  					</p>  					
+  						<a href='/Addfriend?nickname=<%=nickname %>'>Add To My Friends List!</a>
+  					</p>
   				</div>
-  			<%}
-  		}	
-  		%>
-  		<%} %>
+  		<%}
+		} 
+		%>
   	</div>
-  </div>
+
 </body>
 </html>

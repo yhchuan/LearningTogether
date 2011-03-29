@@ -9,9 +9,10 @@
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
+
 <head>
-  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
-  <title>My JSP 'MyJsp.jsp' starting page</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <title>jsp for checking current user's shared item</title>
   <meta http-equiv="pragma" content="no-cache" />
   <meta http-equiv="cache-control" content="no-cache" />
   <meta http-equiv="expires" content="0" />    
@@ -25,54 +26,31 @@
   <script language="javascript" type="text/javascript">
   //-- JavaScript code in here .
   </script>
+  
   <%
-  String url=request.getParameter("shareurl");
-  MyUser myUser=null;
-  	if(url==null)
-  		url="";
+  
   if(UserServiceFactory.getUserService().getCurrentUser()==null)
 	  response.sendRedirect(UserServiceFactory.getUserService().createLoginURL(request.getRequestURI()));
-  myUser=MyUser.getMyUserByNickName(UserServiceFactory.getUserService().getCurrentUser().getNickname());
+  MyUser myUser=MyUser.getMyUserByNickName(UserServiceFactory.getUserService().getCurrentUser().getNickname());
+  List<ShareItem> items=myUser.getItems();
   %>
 </head>
+
 <body>
-  <div id="main">
-  	<form>
-  		<p>
-  			<label for="url">URL:</label>
-  			<input type="text" id="url" name="url" 
-  			value='<%=url %>' />
-  		</p>
-  		<p>
-  			<label for="tag">tag:</label>
-  			<input type="text" id="tag" name="tag" />
-  		</p>
-  		<p>
-  			<label for="shortInfo">shortInfo:</label>
-  			<textarea rows="3" id="shortInfo" name="shortInfo">
-  			</textarea>
-  		</p>  		
-  	</form>
-  	
-  	<div class="sharelist">
-  	<%if(myUser!=null) {%>
-  		<%for(MyUser friend : myUser.getFriends())
-  		{
-  			for(ShareItem item : friend.getItems())
-  			{ %>
-  				<div class="item">
-  					<p>
-  						<a href=<%=item.getUrl() %>><%=item.getShortInfo() %></a>
-  					</p>
-  					<p>
-  						Shared BY <%=friend.getMyNickName() %> At Time:<%=item.getSubmitDate().toString() %>
-  					</p>  					
-  				</div>
-  			<%}
-  		}	
-  		%>
-  		<%} %>
-  	</div>
-  </div>
+    <div>
+    <%
+    for(ShareItem item : items) {
+    	%>
+    	<div>
+    	<p>url: <%=item.getUrl() %> </p>
+    	<p>tag: <%=item.getTag() %> </p>
+    	<p>short info: <%=item.getShortInfo() %> </p>
+    	<p>date: <%=item.getSubmitDate() %> </p>
+    	</div>
+    	<%
+    }
+     %>
+    </div>
 </body>
+
 </html>

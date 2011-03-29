@@ -4,14 +4,24 @@ xmlns="http://java.sun.com/xml/ns/javaee"
 xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
 xsi:schemaLocation="http://java.sun.com/xml/ns/javaee
 http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
-<!-- 	<servlet> -->
-<!-- 		<servlet-name>LearningTogether</servlet-name> -->
-<!-- 		<servlet-class>my.cloud.projects.LearningTogetherServlet</servlet-class> -->
-<!-- 	</servlet> -->
-<!-- 	<servlet-mapping> -->
-<!-- 		<servlet-name>LearningTogether</servlet-name> -->
-<!-- 		<url-pattern>/learningtogether</url-pattern> -->
-<!-- 	</servlet-mapping> -->
+	<servlet>
+		<servlet-name>PostShareItem</servlet-name>
+		<servlet-class>my.cloud.projects.PostShareItem</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>PostShareItem</servlet-name>
+	<url-pattern>/PostShareItem</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>AddFriend</servlet-name>
+	<servlet-class>my.cloud.projects.AddFriend</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>AddFriend</servlet-name>
+		<url-pattern>/AddFriend</url-pattern>
+	</servlet-mapping>
+	
 	<welcome-file-list>
 		<welcome-file>index.jsp</welcome-file>
 	</welcome-file-list>
