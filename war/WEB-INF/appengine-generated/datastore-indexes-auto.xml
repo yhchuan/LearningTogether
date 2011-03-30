@@ -1,4 +1,10 @@
-<!-- Indices written at Mon, 28 Mar 2011 13:34:01 UTC -->
+<!-- Indices written at Wed, 30 Mar 2011 14:55:17 UTC -->
 
-<datastore-indexes/>
+<datastore-indexes>
 
+    <!-- Used 6 times in query history -->
+    <datastore-index kind="ShareItem" ancestor="true" source="auto">
+        <property name="items_INTEGER_IDX" direction="asc"/>
+    </datastore-index>
+
+</datastore-indexes>

@@ -18,14 +18,15 @@ public class PostShareItem extends HttpServlet {
 			throws IOException {
 		UserService userService = UserServiceFactory.getUserService();
 		String nickName=userService.getCurrentUser().getNickname();
-		MyUser myUser = MyUser.getMyUserByNickName(nickName);
+		PersistenceManager pm = PMF.get().getPersistenceManager();
+		MyUser myUser = MyUser.getMyUserByNickName(pm,nickName);
 
 		String url = req.getParameter("url");
 		String tag = req.getParameter("tag");
 		String shortInfo = req.getParameter("shortInfo");
 		
 		ShareItem shareItem = new ShareItem(url, tag, shortInfo, new Date());
-		PersistenceManager pm = PMF.get().getPersistenceManager();
+		
 		try {
 				myUser.getItems().add(shareItem);
 		} finally {

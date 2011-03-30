@@ -19,12 +19,13 @@ public class AddFriend extends HttpServlet {
 			throws IOException {
 		UserService userService = UserServiceFactory.getUserService();
 		String nickName=userService.getCurrentUser().getNickname();
-		MyUser myUser = MyUser.getMyUserByNickName(nickName);
+		PersistenceManager pm=PMF.get().getPersistenceManager();
+		MyUser myUser = MyUser.getMyUserByNickName(pm,nickName);
 
 		String name = req.getParameter("nickname");
 		if(!name.isEmpty())
 		{
-			PersistenceManager pm=PMF.get().getPersistenceManager();
+
 			Query query=pm.newQuery("select from my.cloud.projects.MyUser where myNickName==nickName "
 						+"parameters String nickName");
 			List<MyUser> list;
@@ -36,7 +37,7 @@ public class AddFriend extends HttpServlet {
 			
 			try{
 				for (MyUser friend : list) {
-					myUser.getFriends().add(friend);
+					myUser.getFriends().add(friend.getId());
 				}
 			}finally{
 				pm.close();

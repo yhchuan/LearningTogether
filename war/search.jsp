@@ -6,6 +6,8 @@
 <%@ page import="com.google.appengine.api.users.UserService" %>
 <%@ page import="com.google.appengine.api.users.UserServiceFactory" %>
 <%@ page import="my.cloud.projects.*" %>
+<%@ page import="javax.jdo.Query" %>
+
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -27,23 +29,23 @@
   </script>
   <%
   String nickname=request.getParameter("nickname");
+  PersistenceManager pm=PMF.get().getPersistenceManager();
   MyUser myUser;
   	if(nickname==null)
   		nickname="";
   if(UserServiceFactory.getUserService().getCurrentUser()==null)
 	  response.sendRedirect(UserServiceFactory.getUserService().createLoginURL(request.getRequestURI()));
-  myUser=MyUser.getMyUserByNickName(UserServiceFactory.getUserService().getCurrentUser().getNickname());
+  myUser=MyUser.getMyUserByNickName(pm,UserServiceFactory.getUserService().getCurrentUser().getNickname());
   %>
 </head>
 <body>
 	
   	<div>
   	<%if(myUser!=null) {
-  		PersistenceManager pm=PMF.get().getPersistenceManager();
+  		
 		Query query=pm.newQuery("select from my.cloud.projects.MyUser where myNickName==nickName "
 					+"parameters String nickName");
 		List<MyUser> list=(List<MyUser>)query.execute(nickname);
-  		
   		for(MyUser friend : list)
   		{%>
   				<div>
@@ -51,11 +53,11 @@
   						name:<%=nickname %>
   					</p>
   					<p>
-  						<a href='/Addfriend?nickname=<%=nickname %>'>Add To My Friends List!</a>
+  						<a href='/AddFriend?nickname=<%=nickname %>'>Add To My Friends List!</a>
   					</p>
   				</div>
   		<%}
-		} 
+		}pm.close(); 
 		%>
   	</div>
 

@@ -1,4 +1,3 @@
-<%@page import="org.apache.jasper.tagplugins.jstl.core.ForEach"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ page import="java.util.*"%>
 <%@ page import="javax.jdo.PersistenceManager" %>
@@ -28,10 +27,10 @@
   </script>
   
   <%
-  
+  PersistenceManager pm = PMF.get().getPersistenceManager();
   if(UserServiceFactory.getUserService().getCurrentUser()==null)
 	  response.sendRedirect(UserServiceFactory.getUserService().createLoginURL(request.getRequestURI()));
-  MyUser myUser=MyUser.getMyUserByNickName(UserServiceFactory.getUserService().getCurrentUser().getNickname());
+  MyUser myUser=MyUser.getMyUserByNickName(pm,UserServiceFactory.getUserService().getCurrentUser().getNickname());
   List<ShareItem> items=myUser.getItems();
   %>
 </head>
@@ -48,7 +47,7 @@
     	<p>date: <%=item.getSubmitDate() %> </p>
     	</div>
     	<%
-    }
+    }pm.close();
      %>
     </div>
 </body>

@@ -1,7 +1,7 @@
 package my.cloud.projects;
 
 
-import java.util.Collections;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.jdo.PersistenceManager;
@@ -25,22 +25,22 @@ public class MyUser {
 	private String myNickName;
 
 	@Persistent
-	private List<MyUser> friends;
+	private List<Key> friends;
 
 	@Persistent
 	private List<ShareItem> items;
 	
-	public MyUser(String myNickName, List<MyUser> friends, List<ShareItem> items){
+	public MyUser(String myNickName, List<Key> friends, List<ShareItem> items){
 		this.setMyNickName(myNickName);
 		this.setFriends(friends);
 		this.setItems(items);
 	}
 
-	public void setFriends(List<MyUser> friends) {
+	public void setFriends(List<Key> friends) {
 		this.friends = friends;
 	}
 
-	public List<MyUser> getFriends() {
+	public List<Key> getFriends() {
 		return friends;
 	}
 
@@ -61,12 +61,12 @@ public class MyUser {
 	}
 	
 	//extend
-	public static MyUser getMyUserByNickName(String nickName) {
-		PersistenceManager pm=PMF.get().getPersistenceManager();
+	public static MyUser getMyUserByNickName(PersistenceManager pm,String nickName) {
 		MyUser myUser;
 		Query query=pm.newQuery("select from my.cloud.projects.MyUser where myNickName==nickName "
 					+"parameters String nickName");
 		List<MyUser> list=(List<MyUser>)query.execute(nickName);
+		
 		if (list.size()!=0)
 		{
 			try{
@@ -78,15 +78,19 @@ public class MyUser {
 		}
 		else
 		{
-			myUser=new MyUser(nickName, Collections.EMPTY_LIST, Collections.EMPTY_LIST);
-			try {
-				pm.makePersistent(myUser);
-			} 
-			finally {
-				pm.close();
-			}
+			
+			myUser=new MyUser(nickName, new ArrayList<Key>(), new ArrayList<ShareItem>());
+			pm.makePersistent(myUser);
 		}
 		return myUser;
+	}
+
+	public void setId(Key id) {
+		this.id = id;
+	}
+
+	public Key getId() {
+		return id;
 	}
 
 }

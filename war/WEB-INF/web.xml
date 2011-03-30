@@ -10,12 +10,12 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>PostShareItem</servlet-name>
-	<url-pattern>/PostShareItem</url-pattern>
+		<url-pattern>/PostShareItem</url-pattern>
 	</servlet-mapping>
 	
 	<servlet>
 		<servlet-name>AddFriend</servlet-name>
-	<servlet-class>my.cloud.projects.AddFriend</servlet-class>
+		<servlet-class>my.cloud.projects.AddFriend</servlet-class>
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>AddFriend</servlet-name>

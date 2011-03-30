@@ -1,3 +1,4 @@
+<%@page import="com.google.appengine.api.datastore.Key"%>
 <%@page import="org.apache.jasper.tagplugins.jstl.core.ForEach"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ page import="java.util.*"%>
@@ -6,6 +7,7 @@
 <%@ page import="com.google.appengine.api.users.UserService" %>
 <%@ page import="com.google.appengine.api.users.UserServiceFactory" %>
 <%@ page import="my.cloud.projects.*" %>
+
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -27,17 +29,28 @@
   </script>
   <%
   String url=request.getParameter("shareurl");
+  PersistenceManager pm=PMF.get().getPersistenceManager();
   MyUser myUser=null;
   	if(url==null)
   		url="";
   if(UserServiceFactory.getUserService().getCurrentUser()==null)
 	  response.sendRedirect(UserServiceFactory.getUserService().createLoginURL(request.getRequestURI()));
-  myUser=MyUser.getMyUserByNickName(UserServiceFactory.getUserService().getCurrentUser().getNickname());
+  myUser=MyUser.getMyUserByNickName(pm,UserServiceFactory.getUserService().getCurrentUser().getNickname());
   %>
 </head>
 <body>
+<a href='<%=UserServiceFactory.getUserService().createLogoutURL(UserServiceFactory.getUserService().createLoginURL("/index.jsp")) %>'>logout</a>
+    	<form method="get" action="/search.jsp">
+ 		<p>
+  			<label for="tag">name:</label>
+  			<input type="text" id="nickname" name="nickname" />
+  		</p>
+  		 <p>
+  			<input type="submit" />
+  		</p>
+  	</form>
   <div id="main">
-  	<form>
+  	<form method="post" action="/PostShareItem">
   		<p>
   			<label for="url">URL:</label>
   			<input type="text" id="url" name="url" 
@@ -51,13 +64,19 @@
   			<label for="shortInfo">shortInfo:</label>
   			<textarea rows="3" id="shortInfo" name="shortInfo">
   			</textarea>
-  		</p>  		
+  		</p>
+  		 <p>
+  			<input type="submit" />
+  		</p>
   	</form>
   	
   	<div class="sharelist">
   	<%if(myUser!=null) {%>
-  		<%for(MyUser friend : myUser.getFriends())
+  	
+  		<%for(Key friendkey : myUser.getFriends())
   		{
+  			MyUser friend=pm.getObjectById(MyUser.class, friendkey);
+  			
   			for(ShareItem item : friend.getItems())
   			{ %>
   				<div class="item">
@@ -71,7 +90,7 @@
   			<%}
   		}	
   		%>
-  		<%} %>
+  		<%pm.close();} %>
   	</div>
   </div>
 </body>
