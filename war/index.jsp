@@ -17,16 +17,8 @@
   <meta http-equiv="pragma" content="no-cache" />
   <meta http-equiv="cache-control" content="no-cache" />
   <meta http-equiv="expires" content="0" />    
-  <!--
-  <link rel="stylesheet" type="text/css" href="styles.css" />
-  <script language="javascript" type="text/javascript"></script>
-  -->
-  <style rel="stylesheet" type="text/css">
-  /*-- CSS code in here --*/
-  </style>
-  <script language="javascript" type="text/javascript">
-  //-- JavaScript code in here .
-  </script>
+  <LINK rel=stylesheet type=text/css href="css/basic.css" />
+  <link rel="shortcut icon" href="images/favicon.ico" />
   <%
   String url=request.getParameter("shareurl");
   PersistenceManager pm=PMF.get().getPersistenceManager();
@@ -39,36 +31,9 @@
   %>
 </head>
 <body>
-<a href='<%=UserServiceFactory.getUserService().createLogoutURL(UserServiceFactory.getUserService().createLoginURL("/index.jsp")) %>'>logout</a>
-    	<form method="get" action="/search.jsp">
- 		<p>
-  			<label for="tag">name:</label>
-  			<input type="text" id="nickname" name="nickname" />
-  		</p>
-  		 <p>
-  			<input type="submit" />
-  		</p>
-  	</form>
-  <div id="main">
-  	<form method="post" action="/PostShareItem">
-  		<p>
-  			<label for="url">URL:</label>
-  			<input type="text" id="url" name="url" 
-  			value='<%=url %>' />
-  		</p>
-  		<p>
-  			<label for="tag">tag:</label>
-  			<input type="text" id="tag" name="tag" />
-  		</p>
-  		<p>
-  			<label for="shortInfo">shortInfo:</label>
-  			<textarea rows="3" id="shortInfo" name="shortInfo">
-  			</textarea>
-  		</p>
-  		 <p>
-  			<input type="submit" />
-  		</p>
-  	</form>
+
+ <%@include file="header.jsp" %>
+  <div class="main">
   	
   	<div class="sharelist">
   	<%if(myUser!=null) {%>
@@ -81,10 +46,13 @@
   			{ %>
   				<div class="item">
   					<p>
-  						<a href=<%=item.getUrl() %>><%=item.getShortInfo() %></a>
+  						<a href='<%=item.getUrl() %>' target="_blank"><%=item.getShortInfo() %></a>
+  						<span class="tag"><%=item.getTag() %></span>
   					</p>
+  					 
   					<p>
-  						Shared BY <%=friend.getMyNickName() %> At Time:<%=item.getSubmitDate().toString() %>
+  						由用户<span class="name"><%=friend.getMyNickName() %></span>分享于：
+  						<span class="time"><%=item.getSubmitDate().toString() %></span>
   					</p>  					
   				</div>
   			<%}
@@ -92,6 +60,39 @@
   		%>
   		<%pm.close();} %>
   	</div>
-  </div>
+ 	  <div class="rightside">
+	  	<form method="post" action="/PostShareItem">
+	  		<p>
+	  			<label for="url">地址:</label>
+	  			<input type="text" id="url" name="url" style="width:220px"
+	  			value='<%=url %>' />
+	  		</p>
+	  		<p>
+	  			<label for="tag">标签:</label>
+	  			<input type="text" id="tag" name="tag" style="width:220px"/>
+	  		</p>
+	  		<p>
+	  			<label for="shortInfo">简介:</label>
+	  			</p>
+	  			<textarea rows="5" cols="30" id="shortInfo" name="shortInfo">
+	  			</textarea>
+	  		 <p>
+	  			<input type="submit" value="发布"/>
+	  		</p>
+	  	</form>
+		<div id="jiathis_style_32x32">
+			<a class="jiathis_button_qzone"></a>
+			<a class="jiathis_button_tsina"></a>
+			<a class="jiathis_button_tqq"></a>
+			<a class="jiathis_button_kaixin001"></a>
+			<a class="jiathis_button_renren"></a>
+			<a href="http://www.jiathis.com/share/" class="jiathis jiathis_txt jtico jtico_jiathis" target="_blank"></a>
+		</div>
+		<script type="text/javascript" src="http://v1.jiathis.com/code/jia.js" charset="utf-8"></script>
+ 	</div>
+ 	<div style="clear:both"></div>
+ </div>
+
+  <%@include file="footer.jsp" %>
 </body>
 </html>

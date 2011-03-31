@@ -17,16 +17,8 @@
   <meta http-equiv="pragma" content="no-cache" />
   <meta http-equiv="cache-control" content="no-cache" />
   <meta http-equiv="expires" content="0" />    
-  <!--
-  <link rel="stylesheet" type="text/css" href="styles.css" />
-  <script language="javascript" type="text/javascript"></script>
-  -->
-  <style rel="stylesheet" type="text/css">
-  /*-- CSS code in here --*/
-  </style>
-  <script language="javascript" type="text/javascript">
-  //-- JavaScript code in here .
-  </script>
+    <LINK rel=stylesheet type=text/css href="css/basic.css" />
+  <link rel="shortcut icon" href="images/favicon.ico" />
   <%
   String nickname=request.getParameter("nickname");
   PersistenceManager pm=PMF.get().getPersistenceManager();
@@ -39,27 +31,61 @@
   %>
 </head>
 <body>
-	
-  	<div>
-  	<%if(myUser!=null) {
-  		
-		Query query=pm.newQuery("select from my.cloud.projects.MyUser where myNickName==nickName "
-					+"parameters String nickName");
-		List<MyUser> list=(List<MyUser>)query.execute(nickname);
-  		for(MyUser friend : list)
-  		{%>
-  				<div>
-  					<p>
-  						name:<%=nickname %>
-  					</p>
-  					<p>
-  						<a href='/AddFriend?nickname=<%=nickname %>'>Add To My Friends List!</a>
-  					</p>
-  				</div>
-  		<%}
-		}pm.close(); 
-		%>
-  	</div>
+	<%@include file="header.jsp" %>
+	<div class="main">
+	  	<div class="sharelist">
+	  	<%if(myUser!=null) {
+	  		
+			Query query=pm.newQuery("select from my.cloud.projects.MyUser where myNickName==nickName "
+						+"parameters String nickName");
+			List<MyUser> list=(List<MyUser>)query.execute(nickname);
+	  		for(MyUser friend : list)
+	  		{%>
+	  				<div class="item">
+	  					<p>
+	  						名字:<span class="name"><%=nickname %></span>
+	  					</p>
+	  					<p>
+	  						<a href='/AddFriend?nickname=<%=nickname %>'>+加为好友</a>
+	  					</p>
+	  				</div>
+	  		<%}
+			}pm.close(); 
+			%>
+	  	</div>
+	  <div class="rightside">
+	  	<form method="post" action="/PostShareItem">
+	  		<p>
+	  			<label for="url">地址:</label>
+	  			<input type="text" id="url" name="url" style="width:220px" />
+	  		</p>
+	  		<p>
+	  			<label for="tag">标签:</label>
+	  			<input type="text" id="tag" name="tag" style="width:220px"/>
+	  		</p>
+	  		<p>
+	  			<label for="shortInfo">简介:</label>
+	  			</p>
+	  			<textarea rows="5" cols="30" id="shortInfo" name="shortInfo">
+	  			</textarea>
+	  		 <p>
+	  			<input type="submit" value="发布"/>
+	  		</p>
+	  	</form>
+			<div id="jiathis_style_32x32">
+				<a class="jiathis_button_qzone"></a>
+				<a class="jiathis_button_tsina"></a>
+				<a class="jiathis_button_tqq"></a>
+				<a class="jiathis_button_kaixin001"></a>
+				<a class="jiathis_button_renren"></a>
+				<a href="http://www.jiathis.com/share/" class="jiathis jiathis_txt jtico jtico_jiathis" target="_blank"></a>
+			</div>
+			<script type="text/javascript" src="http://v1.jiathis.com/code/jia.js" charset="utf-8"></script>
+ 		</div>
+ 		<div style="clear:both"></div>
+ 	</div>
 
+  	
+<%@include file="footer.jsp" %>
 </body>
 </html>

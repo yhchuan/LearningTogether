@@ -1,0 +1,54 @@
+@CHARSET "UTF-8";
+body {
+	background: #8EE5EE	;	
+	font-family: "Trebuchet MS",Verdana,Arial,sans-serif;
+	font-size: 14px;
+	line-height: 1.6;
+}
+
+.main {
+	width: 960px;
+	margin: 10px auto;
+	padding: 10px;
+	background: #69F;	
+	border: 1px solid #CCC;
+	float: none;
+}
+
+.rightside {
+	float:left;
+	margin:30px;
+	}
+
+.sharelist {
+	float:left;
+	width:600px;
+	}
+
+.item {
+	width: 600px;
+	margin: 5px auto;
+	padding:5px;
+	background: #eee;	
+	border: 3px solid #06F;
+	}
+.time{
+	font-family:Georgia, "Times New Roman", Times, serif;
+	color:#00F;
+	font-size:larger;
+	}
+.name{
+	font-family:"Palatino Linotype", "Book Antiqua", Palatino, serif;
+	color:#F30;
+	font-size:larger;
+	font-weight:bold;
+	}
+.tag{
+	font-family:"Arial Black", Gadget, sans-serif
+	color:#000;
+	background-color:#0F0;
+	font-size:smaller;
+	}
+textarea{
+	resize:none;
+	}
